@@ -11,7 +11,7 @@ credentials = service_account.Credentials.from_service_account_file(
 )
 
 # Refresh the credentials if necessary
-if credentials.expired:
+if not credentials.valid or credentials.expired:
 	credentials.refresh(Request())
 
 # Read the batch of URLs from a file
@@ -35,7 +35,7 @@ for line in batch:
 
 # Configure the request
 headers = {
-	'Authorization': 'Bearer ' + credentials.token,
+	'Authorization': f'Bearer {credentials.token}',
 	'Content-Type': 'multipart/mixed'
 }
 data = {'multipart': items}
