@@ -1,0 +1,6 @@
+{
+  "klaemo.standardjs.config.autoFixOnSave" : "Disable",
+  "prettier.format-on-save" : "Disable",
+  "prettier.format-on-save.ignore-without-config" : "Enable",
+  "workspace.name" : "SEARCH"
+}

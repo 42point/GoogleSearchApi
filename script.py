@@ -19,27 +19,25 @@ with open('urls.txt', 'r') as file:
 	batch = file.read().splitlines()
 
 # Prepare the batch request
-items = []
+boundary = 'batch_foobarbaz'  # Define a boundary string
+body = ''
 for line in batch:
-	item = {
-		'Content-Type': 'application/http',
-		'Content-ID': '',
-		'body': 'POST /v3/urlNotifications:publish HTTP/1.1\n'
-				'Content-Type: application/json\n\n' +
-				json.dumps({
-					'url': line,
-					'type': 'URL_UPDATED'
-				})
-	}
-	items.append(item)
+	body += '--' + boundary + '\n'
+	body += 'Content-Type: application/http\n'
+	body += '\n'
+	body += 'POST /v3/urlNotifications:publish HTTP/1.1\n'
+	body += 'Content-Type: application/json; charset=utf-8\n'
+	body += '\n'
+	body += json.dumps({'url': line, 'type': 'URL_UPDATED'}) + '\n'
+
+body += '--' + boundary + '--'
 
 # Configure the request
 headers = {
 	'Authorization': f'Bearer {credentials.token}',
-	'Content-Type': 'multipart/mixed'
+	'Content-Type': 'multipart/mixed; boundary=' + boundary
 }
-data = {'multipart': items}
-response = requests.post('https://indexing.googleapis.com/batch', headers=headers, json=data)
+response = requests.post('https://indexing.googleapis.com/batch', headers=headers, data=body)
 
 # Print the response
 print(response.text)

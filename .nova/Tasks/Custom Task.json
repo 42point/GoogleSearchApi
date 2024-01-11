@@ -1,0 +1,9 @@
+{
+  "actions" : {
+    "run" : {
+      "enabled" : true,
+      "script" : "#!\/bin\/sh\npython3 script.py"
+    }
+  },
+  "openLogOnRun" : "start"
+}
